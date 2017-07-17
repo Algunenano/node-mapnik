@@ -2648,8 +2648,7 @@ v8::Local<v8::Value> Image::_fromSVGSync(bool fromFile, Nan::NAN_METHOD_ARGS_TYP
             {
                 std::ostringstream errorMessage("");
                 errorMessage << "SVG parse error:" << std::endl;
-                auto const& errors = p.error_messages();
-                for (auto error : errors) {
+                for (auto const& error : p.err_handler().error_messages()) {
                     errorMessage <<  error << std::endl;
                 }
                 //Nan::ThrowTypeError(errorMessage.str().c_str());
@@ -2670,8 +2669,7 @@ v8::Local<v8::Value> Image::_fromSVGSync(bool fromFile, Nan::NAN_METHOD_ARGS_TYP
             {
                 std::ostringstream errorMessage("");
                 errorMessage << "SVG parse error:" << std::endl;
-                auto const& errors = p.error_messages();
-                for (auto error : errors) {
+                for (auto const& error : p.err_handler().error_messages()) {
                     errorMessage <<  error << std::endl;
                 }
                 //Nan::ThrowTypeError(errorMessage.str().c_str());
@@ -2884,8 +2882,7 @@ void Image::EIO_FromSVG(uv_work_t* req)
         {
             std::ostringstream errorMessage("");
             errorMessage << "SVG parse error:" << std::endl;
-            auto const& errors = p.error_messages();
-            for (auto error : errors) {
+            for (auto const& error : p.err_handler().error_messages()) {
                 errorMessage <<  error << std::endl;
             }
             closure->error = true;
@@ -3102,8 +3099,7 @@ void Image::EIO_FromSVGBytes(uv_work_t* req)
         {
             std::ostringstream errorMessage("");
             errorMessage << "SVG parse error:" << std::endl;
-            auto const& errors = p.error_messages();
-            for (auto error : errors) {
+            for (auto const& error : p.err_handler().error_messages()) {
                 errorMessage <<  error << std::endl;
             }
             closure->error = true;
