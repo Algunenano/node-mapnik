@@ -91,6 +91,32 @@ describe('mapnik.Image SVG', function() {
 
     });
 
+    // Parsing well-known unsupported elements and attributes: if `strict` option is `false` (default) then succeed returning parsing errors, else fail
+    it('strict:false', function(done) {
+        var buffer = fs.readFileSync('./test/data/images/san-marino.svg');
+        mapnik.Image.fromSVGBytes(buffer, {strict: false}, function(err, img) {
+          assert.ok(err);
+          // [Error: Unsupported:"text]
+          assert.ok(err.message.match(/Unsupported:\"text/));
+          done();
+         });
+    });
+
+    it('strict:true', function(done) {
+        var buffer = fs.readFileSync('./test/data/images/san-marino.svg');
+      try {
+        mapnik.Image.fromSVGBytes(buffer, {strict: true}, function(err, img) {
+          assert.ok(err);
+          // [Error: Unsupported:"text]
+          assert.ok(err.message.match(/Unsupported:\"text/));
+          done();
+        });
+      } catch (err)
+      {
+        // currently we don't get here!
+      }
+    });
+
     it('blocks allocating a very large image', function(done) {
         // 65535 is the max width/height in mapnik
         var svgdata = "<svg width='65535' height='65535'><g id='a'><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>";
