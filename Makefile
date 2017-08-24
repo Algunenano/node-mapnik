@@ -1,6 +1,6 @@
 MODULE_NAME := $(shell node -e "console.log(require('./package.json').binary.module_name)")
 
-default: release
+default: debug_base 
 
 deps/geometry/include/mapbox/geometry.hpp:
 	git submodule update --init
