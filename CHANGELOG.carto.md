@@ -1,5 +1,12 @@
 # CARTO node-mapnik changelog
 
+## 3.6.2-carto.2
+
+**Release date**: 2018-01-15
+
+Changes:
+ - Make sure the submodules are included
+
 ## 3.6.2-carto.1
 
 **Release date**: 2018-01-05
