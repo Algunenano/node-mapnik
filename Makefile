@@ -2,7 +2,7 @@ MODULE_NAME := $(shell node -e "console.log(require('./package.json').binary.mod
 
 NODE_MAPNIK_BUILD ?= release
 
-NODE_GYP_FLAGS ?= -j $(shell nproc)
+NODE_GYP_FLAGS ?= -j $(shell nproc) --ENABLE_GLIBC_WORKAROUND=true
 
 CC  ?= clang
 CXX ?= clang++
