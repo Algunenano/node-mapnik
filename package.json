@@ -37,8 +37,7 @@
   "dependencies": {
     "mapnik-vector-tile": "cartodb/mapnik-vector-tile#v1.6.1-carto.1",
     "nan": "2.10.0",
-    "node-pre-gyp": "0.10.0",
-    "protozero": "1.5.1"
+    "node-pre-gyp": "0.10.0"
   },
   "bundledDependencies": [
     "node-pre-gyp"
