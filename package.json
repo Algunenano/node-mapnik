@@ -39,9 +39,6 @@
     "nan": "2.10.0",
     "node-pre-gyp": "0.10.0"
   },
-  "bundledDependencies": [
-    "node-pre-gyp"
-  ],
   "bin": {
     "mapnik-index.js": "./bin/mapnik-index.js",
     "mapnik-inspect.js": "./bin/mapnik-inspect.js",
