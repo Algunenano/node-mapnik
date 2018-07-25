@@ -1,5 +1,12 @@
 # CARTO node-mapnik changelog
 
+## 3.6.2-carto.11
+
+**Release date**: 2018-XX-XX
+
+Changes:
+ - Use protozero from submodule instead of the deprecated npm module.
+
 ## 3.6.2-carto.10
 
 **Release date**: 2018-05-14
