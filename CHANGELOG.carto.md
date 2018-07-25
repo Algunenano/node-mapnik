@@ -6,6 +6,12 @@
 
 Changes:
  - Use protozero from submodule instead of the deprecated npm module.
+ - Update development dependencies:
+    - Remove "node-gyp" as it's no longer needed (no node 0.10 support).
+    - "jshint": "^2.5.10" -> "2.9.5"
+    - "mocha": "2.x" -> "5.2.0"
+    - ""@mapbox/sphericalmercator": "~1.0.2" -> "1.0.5"
+    - "bytes": "~2.1.0" -> "3.0.0"
 
 ## 3.6.2-carto.10
 
