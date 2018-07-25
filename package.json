@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "aws-sdk": "2.0.12",
-    "jshint": "^2.5.10",
+    "jshint": "2.9.5",
     "mocha": "2.x",
     "@mapbox/sphericalmercator": "~1.0.2",
     "bytes": "~2.1.0"
