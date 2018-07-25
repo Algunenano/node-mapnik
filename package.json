@@ -47,14 +47,14 @@
   },
   "scripts": {
     "prepublishOnly": "npm ls",
-    "test": "jshint bin lib/index.js lib/mapnik.js && mocha -R spec --timeout 50000",
+    "test": "jshint bin lib/index.js lib/mapnik.js && mocha --exit -R spec --timeout 50000",
     "install": "node-pre-gyp install --fallback-to-build",
     "docs": "documentation build src/*.cpp src/mapnik_plugins.hpp --polyglot -o documentation -f html --github --name Mapnik"
   },
   "devDependencies": {
     "aws-sdk": "2.0.12",
     "jshint": "2.9.5",
-    "mocha": "2.x",
+    "mocha": "5.2.0",
     "@mapbox/sphericalmercator": "~1.0.2",
     "bytes": "~2.1.0"
   },
