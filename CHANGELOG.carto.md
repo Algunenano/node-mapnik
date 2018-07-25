@@ -12,6 +12,7 @@ Changes:
     - "mocha": "2.x" -> "5.2.0"
     - ""@mapbox/sphericalmercator": "~1.0.2" -> "1.0.5"
     - "bytes": "~2.1.0" -> "3.0.0"
+ - EDIT this
 
 ## 3.6.2-carto.10
 
