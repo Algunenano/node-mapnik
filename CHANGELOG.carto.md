@@ -2,7 +2,7 @@
 
 ## 3.6.2-carto.11
 
-**Release date**: 2018-XX-XX
+**Release date**: 2018-07-30
 
 Changes:
  - Use protozero from submodule instead of the deprecated npm module.
