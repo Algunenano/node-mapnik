@@ -12,6 +12,7 @@ Changes:
     - "mocha": "2.x" -> "5.2.0"
     - ""@mapbox/sphericalmercator": "~1.0.2" -> "1.0.5"
     - "bytes": "~2.1.0" -> "3.0.0"
+ - Update mapnik-vector-tile to [v1.6.1-carto.2](https://github.com/CartoDB/mapnik-vector-tile/blob/v1.6.1-carto/CHANGELOG.carto.md#161-carto2) to simplify MVTs based on the layer extent.
 
 ## 3.6.2-carto.10
 
