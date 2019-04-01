@@ -25,10 +25,10 @@ describe('mapnik.Image SVG', function() {
         }, /first argument is invalid, must be a Buffer/);
         assert.throws(function() {
           new mapnik.Image.fromSVGBytesSync(new Buffer('asdfasdf'));
-        }, /SVG parse error:\s+Unable to parse 'asdfasdf'/);
+        }, /SVG error: unable to parse "asdfasdf"/);
         assert.throws(function() {
           mapnik.Image.fromSVGSync('./test/data/SVG_DOES_NOT_EXIST.svg');
-        }, /SVG parse error:\s+Unable to open '.\/test\/data\/SVG_DOES_NOT_EXIST.svg'/);
+        }, /SVG error: unable to open "\.\/test\/data\/SVG_DOES_NOT_EXIST\.svg"/);
         assert.throws(function() {
           mapnik.Image.fromSVGSync('./test/data/vector_tile/tile0.expected-svg.svg', 256);
         }, /optional second arg must be an options object/);
@@ -73,7 +73,7 @@ describe('mapnik.Image SVG', function() {
         }, /image created from svg must have a width and height greater then zero/);
         mapnik.Image.fromSVGBytes(new Buffer('a'), { scale: 1 }, function(err, res) {
             assert.ok(err);
-            assert.ok(err.message.match(/Unable to parse 'a'/));
+            assert.ok(err.message.match(/SVG error: unable to parse "a"/));
             var svgdata = "<svg width='1000000000000' height='1000000000000'><g id='a'><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>";
             var buffer = new Buffer(svgdata);
             mapnik.Image.fromSVGBytes(buffer, { scale: 1 }, function(err, img) {
@@ -89,32 +89,6 @@ describe('mapnik.Image SVG', function() {
             });
         });
 
-    });
-
-    // Parsing well-known unsupported elements and attributes: if `strict` option is `false` (default) then succeed returning parsing errors, else fail
-    it('strict:false', function(done) {
-        var buffer = fs.readFileSync('./test/data/images/san-marino.svg');
-        mapnik.Image.fromSVGBytes(buffer, {strict: false}, function(err, img) {
-          assert.ok(err);
-          // [Error: Unsupported:"text]
-          assert.ok(err.message.match(/Unsupported:\"text/));
-          done();
-         });
-    });
-
-    it('strict:true', function(done) {
-        var buffer = fs.readFileSync('./test/data/images/san-marino.svg');
-      try {
-        mapnik.Image.fromSVGBytes(buffer, {strict: true}, function(err, img) {
-          assert.ok(err);
-          // [Error: Unsupported:"text]
-          assert.ok(err.message.match(/Unsupported:\"text/));
-          done();
-        });
-      } catch (err)
-      {
-        // currently we don't get here!
-      }
     });
 
     it('blocks allocating a very large image', function(done) {
@@ -175,7 +149,7 @@ describe('mapnik.Image SVG', function() {
         done();
       });
     });
-    
+
     it('should err with async file w/o width or height as Bytes', function(done) {
         var svgdata = "<svg width='0' height='0'><g id='a'><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>";
         var buffer = new Buffer(svgdata);
@@ -190,7 +164,7 @@ describe('mapnik.Image SVG', function() {
     it('should err with async invalid buffer', function(done) {
       mapnik.Image.fromSVGBytes(new Buffer('asdfasdf'), function(err, svg) {
         assert.ok(err);
-        assert.ok(err.message.match(/SVG parse error:\s+Unable to parse 'asdfasdf'/));
+        assert.ok(err.message.match(/SVG error: unable to parse "asdfasdf"/));
         assert.equal(svg, undefined);
         done();
       });
@@ -199,19 +173,61 @@ describe('mapnik.Image SVG', function() {
     it('should err with async non-existent file', function(done) {
       mapnik.Image.fromSVG('./test/data/SVG_DOES_NOT_EXIST.svg', function(err, svg) {
         assert.ok(err);
-        assert.ok(err.message.match(/SVG parse error:\s+Unable to open '.\/test\/data\/SVG_DOES_NOT_EXIST.svg'/));
+        assert.ok(err.message.match(/SVG error: unable to open "\.\/test\/data\/SVG_DOES_NOT_EXIST\.svg"/));
         assert.equal(svg, undefined);
         done();
       });
     });
 
-    it('should error with async file full of errors', function(done) {
-      mapnik.Image.fromSVG('./test/data/vector_tile/errors.svg', function(err, svg) {
+    it('should not error with async in non-strict mode on svg with validation and parse errors', function(done) {
+      mapnik.Image.fromSVG('./test/data/vector_tile/errors.svg', {strict:false}, function(err, svg) {
+        assert.ok(!err);
+        assert.ok(svg);
+        done();
+      });
+    });
+
+    it('should error with async in strict mode on svg with validation and parse errors', function(done) {
+      mapnik.Image.fromSVG('./test/data/vector_tile/errors.svg', {strict:true}, function(err, svg) {
         assert.ok(err);
         assert.ok(err.message.match(/SVG parse error:/));
+        console.log(err.message)
         assert.equal(svg, undefined);
         done();
       });
+    });
+
+    it('should not error on svg with unhandled elements in non-strict mode', function() {
+        var svgdata = "<svg width='100' height='100'><g id='a'><text></text><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>";
+        var buffer = new Buffer(svgdata);
+        var img = mapnik.Image.fromSVGBytesSync(buffer,{strict:false});
+        assert.ok(img);
+        assert.ok(img instanceof mapnik.Image);
+        assert.equal(img.width(), 100);
+        assert.equal(img.height(), 100);
+        assert.equal(img.encodeSync("png").length, 1270);
+    });
+
+
+    //  test the mapnik core known unsupported elements: https://github.com/mapnik/mapnik/blob/634928fcbe780e8a5a355ddb3cd075ce2450adb4/src/svg/svg_parser.cpp#L106-L114
+    it('should error on svg with unhandled elements in strict mode', function() {
+        var svgdata = "<svg width='100' height='100'><g id='a'><unsupported></unsupported><text></text><symbol></symbol><image></image><marker></marker><view></view><switch></switch><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>";
+        var buffer = new Buffer(svgdata);
+        var error = false;
+        try {
+          var img = mapnik.Image.fromSVGBytesSync(buffer,{strict:true});
+          assert.ok(!img);
+        } catch (err) {
+          error = err;
+        }
+        assert.ok(error);
+        assert.ok(error.message.match(/<text> element is not supported/));
+        assert.ok(error.message.match(/<switch> element is not supported/));
+        assert.ok(error.message.match(/<symbol> element is not supported/));
+        assert.ok(error.message.match(/<marker> element is not supported/));
+        assert.ok(error.message.match(/<view> element is not supported/));
+        assert.ok(error.message.match(/<a> element is not supported/));
+        assert.ok(error.message.match(/<image> element is not supported/));
     });
 
     it('#fromSVGSync load from SVG file', function() {
@@ -222,7 +238,7 @@ describe('mapnik.Image SVG', function() {
         assert.equal(img.height(), 256);
         assert.equal(img.encodeSync('png32').length, 17571);
     });
-    
+
     it('#fromSVGSync load from SVG file - 2', function() {
         var img = mapnik.Image.fromSVG('./test/data/vector_tile/tile0.expected-svg.svg');
         assert.ok(img);
