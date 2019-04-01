@@ -5,7 +5,7 @@
   "homepage": "http://mapnik.org",
   "author": "Dane Springmeyer <dane@mapbox.com> (mapnik.org)",
   "version": "3.6.2-carto.11",
-  "mapnik_version": "v3.0.15.9",
+  "mapnik_version": "v3.0.15.10",
   "main": "./lib/mapnik.js",
   "binary": {
     "module_name": "mapnik",
@@ -36,8 +36,8 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "mapnik-vector-tile": "cartodb/mapnik-vector-tile#v1.6.1-carto.2",
-    "nan": "2.10.0",
-    "node-pre-gyp": "0.10.0"
+    "nan": "2.13.2",
+    "node-pre-gyp": "0.12.0"
   },
   "bin": {
     "mapnik-index.js": "./bin/mapnik-index.js",
@@ -52,11 +52,11 @@
     "docs": "documentation build src/*.cpp src/mapnik_plugins.hpp --polyglot -o documentation -f html --github --name Mapnik"
   },
   "devDependencies": {
-    "aws-sdk": "2.0.12",
-    "jshint": "2.9.5",
-    "mocha": "5.2.0",
     "@mapbox/sphericalmercator": "1.0.5",
-    "bytes": "3.0.0"
+    "aws-sdk": "2.0.12",
+    "bytes": "3.0.0",
+    "jshint": "^2.10.2",
+    "mocha": "5.2.0"
   },
   "jshintConfig": {
     "node": true,
