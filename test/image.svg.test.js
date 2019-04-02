@@ -190,8 +190,7 @@ describe('mapnik.Image SVG', function() {
     it('should error with async in strict mode on svg with validation and parse errors', function(done) {
       mapnik.Image.fromSVG('./test/data/vector_tile/errors.svg', {strict:true}, function(err, svg) {
         assert.ok(err);
-        assert.ok(err.message.match(/SVG parse error:/));
-        console.log(err.message)
+        assert.ok(err.message.match(/SVG validation error:/));
         assert.equal(svg, undefined);
         done();
       });
@@ -209,24 +208,47 @@ describe('mapnik.Image SVG', function() {
     });
 
 
+    function svg_error(svgdata) {
+            var buffer = new Buffer(svgdata);
+            var error = false;
+            try {
+                var img = mapnik.Image.fromSVGBytesSync(buffer,{strict:true});
+            } catch (err) {
+                error = err;
+            }
+
+            return error;
+    }
+
+
     //  test the mapnik core known unsupported elements: https://github.com/mapnik/mapnik/blob/634928fcbe780e8a5a355ddb3cd075ce2450adb4/src/svg/svg_parser.cpp#L106-L114
     it('should error on svg with unhandled elements in strict mode', function() {
-        var svgdata = "<svg width='100' height='100'><g id='a'><unsupported></unsupported><text></text><symbol></symbol><image></image><marker></marker><view></view><switch></switch><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>";
-        var buffer = new Buffer(svgdata);
-        var error = false;
-        try {
-          var img = mapnik.Image.fromSVGBytesSync(buffer,{strict:true});
-          assert.ok(!img);
-        } catch (err) {
-          error = err;
-        }
+        var error = svg_error("<svg width='100' height='100'><g id='a'><unsupported></unsupported><text></text><symbol></symbol><image></image><marker></marker><view></view><switch></switch><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>");
         assert.ok(error);
         assert.ok(error.message.match(/<text> element is not supported/));
-        assert.ok(error.message.match(/<switch> element is not supported/));
+
+        error = svg_error("<svg width='100' height='100'><g id='a'><unsupported></unsupported><symbol></symbol><image></image><marker></marker><view></view><switch></switch><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>");
+        assert.ok(error);
         assert.ok(error.message.match(/<symbol> element is not supported/));
+
+        error = svg_error("<svg width='100' height='100'><g id='a'><unsupported></unsupported><switch></switch><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>");
+        assert.ok(error);
+        assert.ok(error.message.match(/<switch> element is not supported/));
+
+        error = svg_error("<svg width='100' height='100'><g id='a'><unsupported></unsupported><marker></marker><view></view><switch></switch><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>");
+        assert.ok(error);
         assert.ok(error.message.match(/<marker> element is not supported/));
+
+        error = svg_error("<svg width='100' height='100'><g id='a'><unsupported></unsupported><view></view><switch></switch><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>");
+        assert.ok(error);
         assert.ok(error.message.match(/<view> element is not supported/));
+
+        error = svg_error("<svg width='100' height='100'><g id='a'><unsupported></unsupported><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>");
+        assert.ok(error);
         assert.ok(error.message.match(/<a> element is not supported/));
+
+        error = svg_error("<svg width='100' height='100'><g id='a'><unsupported></unsupported><image></image><marker></marker><view></view><switch></switch><a></a><ellipse fill='#FFFFFF' stroke='#000000' stroke-width='4' cx='50' cy='50' rx='25' ry='25'/></g></svg>");
+        assert.ok(error);
         assert.ok(error.message.match(/<image> element is not supported/));
     });
 
