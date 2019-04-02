@@ -213,7 +213,7 @@ describe('mapnik.Datasource', function() {
     });
 
     it('test empty geojson datasource due to invalid json file', function() {
-        assert.throws(function() { new mapnik.Datasource({ type:'geojson', file: './test/data/parse.error.json', cache_features: false }); });
+        assert.throws(function() { new mapnik.Datasource({ type:'geojson', file: './test/data/parse.error.json', cache_features: true }); });
     });
 
     it('test valid use of memory datasource', function() {
