@@ -74,4 +74,4 @@ testpack:
 	tar -ztvf *tgz
 	rm -f ./*tgz
 
-.PHONY: test docs release debug strip node_modules
+.PHONY: test docs release debug strip
