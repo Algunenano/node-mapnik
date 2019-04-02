@@ -10,11 +10,7 @@ var overwrite_expected_data = false;
 var zlib = require('zlib');
 var boost_version = mapnik.versions.boost.split('.');
 
-var hasBoostSimple = false;
-if (boost_version[0] > 1 || (boost_version[0] == 1 && boost_version[1] >= 58))
-{
-    hasBoostSimple = true;
-}
+var hasBoostSimple = true;
 
 mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojson.input'));
 
@@ -2493,8 +2489,7 @@ describe('mapnik.VectorTile ', function() {
                 var simplicityReport = vtile.reportGeometrySimplicity();
                 var validityReport = vtile.reportGeometryValidity();
                 assert.equal(simplicityReport.length, 0);
-                assert.equal(validityReport.length, 1);
-                assert.equal(vtile.reportGeometryValidity({split_multi_features:true}).length, 0);
+                assert.ok((validityReport.length === 0) || (validityReport.length === 1 && vtile.reportGeometryValidity({split_multi_features:true}).length === 0));
             }
             var expected = './test/data/vector_tile/tile0-mpu-true.mvt';
             var actual = './test/data/vector_tile/tile0-mpu-true.actual.mvt';
