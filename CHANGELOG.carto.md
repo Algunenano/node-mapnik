@@ -5,9 +5,9 @@
 **Release date**: 2019-XX-XX
 
 Changes:
- - Update mapnik to [v3.0.15.10](https://github.com/CartoDB/mapnik/blob/v3.0.15.10/CHANGELOG.carto.md#301510) which brings fixes from upstream (3.0.22), improves clip calculation when using offsets and updates some dependencies.
+ - Update mapnik to [v3.0.15.11](https://github.com/CartoDB/mapnik/blob/v3.0.15.11/CHANGELOG.carto.md#301511) which brings fixes from upstream (3.0.22), improves clip calculation when using offsets, updates some dependencies and addresses ubsan warnings.
  - Ports https://github.com/mapnik/node-mapnik/pull/877.
- - Updates node depdendecies ("nan": "2.13.2", "node-pre-gyp": "0.12.0")
+ - Updates node depdendecies ("nan": "2.13.2", "node-pre-gyp": "0.12.0").
 
 ## 3.6.2-carto.11
 
