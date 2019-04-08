@@ -36,7 +36,7 @@ debug: mason_packages/.link/bin/mapnik-config
 	PATH="./mason_packages/.link/bin/:${PATH}" CC="clang" CXX="clang++" $(MAKE) debug_base
 
 strip:
-	find lib -type f \( -iname \*.so -o -iname \*.node \) | xargs strip -s
+	find lib -type f \( -iname \*.so -o -iname \*.node -o -iname \*.dylib \) | xargs strip -s
 
 coverage:
 	./scripts/coverage.sh
