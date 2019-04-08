@@ -187,6 +187,17 @@ describe('mapnik.Image SVG', function() {
       });
     });
 
+    it('should not error with sync in non-strict mode on svg with validation and parse errors', function(done) {
+      try {
+        var img = mapnik.Image.fromSVGSync('./test/data/vector_tile/errors.svg', {strict:false});
+        assert.ok(img);
+      } catch (err) {
+          console.log(err);
+          assert.ok(!err);
+      }
+      done();
+    });
+
     it('should error with async in strict mode on svg with validation and parse errors', function(done) {
       mapnik.Image.fromSVG('./test/data/vector_tile/errors.svg', {strict:true}, function(err, svg) {
         assert.ok(err);
