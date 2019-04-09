@@ -2,7 +2,7 @@ MODULE_NAME := $(shell node -e "console.log(require('./package.json').binary.mod
 
 NODE_MAPNIK_BUILD ?= release
 
-NODE_GYP_FLAGS ?= -j $(shell nproc) --ENABLE_GLIBC_WORKAROUND=true
+NODE_GYP_FLAGS ?= -j $(shell sh -c "nproc 2>/dev/null || sysctl -n hw.physicalcpu 2>/dev/null || echo 1") --ENABLE_GLIBC_WORKAROUND=true
 
 CC  ?= clang
 CXX ?= clang++
@@ -36,7 +36,9 @@ debug: mason_packages/.link/bin/mapnik-config
 	PATH="./mason_packages/.link/bin/:${PATH}" CC="clang" CXX="clang++" $(MAKE) debug_base
 
 strip:
-	find lib -type f \( -iname \*.so -o -iname \*.node -o -iname \*.dylib \) | xargs strip -s
+	(find lib -type f \( -iname \*.so    \) | xargs strip -s) 2>/dev/null || true
+	(find lib -type f \( -iname \*.node  \) | xargs strip -s) 2>/dev/null || true
+	(find lib -type f \( -iname \*.dylib \) | xargs strip -s) 2>/dev/null || true
 
 coverage:
 	./scripts/coverage.sh
