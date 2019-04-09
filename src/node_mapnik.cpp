@@ -164,7 +164,7 @@ extern "C" {
 
         // versions of deps
         v8::Local<v8::Object> versions = Nan::New<v8::Object>();
-        versions->Set(Nan::New("node").ToLocalChecked(), Nan::New<v8::String>(NODE_VERSION+1).ToLocalChecked()); // NOTE: +1 strips the v in v0.10.26
+        versions->Set(Nan::New("node").ToLocalChecked(), Nan::New<v8::String>(&NODE_VERSION[1]).ToLocalChecked()); // NOTE: +1 strips the v in v0.10.26
         versions->Set(Nan::New("v8").ToLocalChecked(), Nan::New<v8::String>(v8::V8::GetVersion()).ToLocalChecked());
         versions->Set(Nan::New("boost").ToLocalChecked(), Nan::New<v8::String>(format_version(BOOST_VERSION)).ToLocalChecked());
         versions->Set(Nan::New("boost_number").ToLocalChecked(), Nan::New(BOOST_VERSION));
