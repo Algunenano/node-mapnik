@@ -8,6 +8,7 @@ Changes:
  - Update mapnik to [v3.0.15.12](https://github.com/CartoDB/mapnik/blob/v3.0.15.12/CHANGELOG.carto.md#301512) which brings fixes from upstream (3.0.22), improves clip calculation when using offsets, updates some dependencies and addresses multiple undefined behaviour bugs.
  - Ports https://github.com/mapnik/node-mapnik/pull/877.
  - Updates node depdendecies ("nan": "2.13.2", "node-pre-gyp": "0.12.0").
+ - v10 / debug: Avoid extracting objects before checking for NULL input.
 
 ## 3.6.2-carto.11
 
